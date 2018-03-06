@@ -11,11 +11,10 @@
 			</el-col>
 			<el-col :span="4" class="userinfo">
 				<el-dropdown trigger="hover">
-					<span class="el-dropdown-link userinfo-inner"><img :src="this.sysUserAvatar" /> {{sysUserName}}</span>
+					<span class="el-dropdown-link userinfo-inner"><img :src="this.sysUserAvatar" /> {{ sysUserName }}</span>
 					<el-dropdown-menu slot="dropdown">
-						<el-dropdown-item>我的消息</el-dropdown-item>
-						<el-dropdown-item>设置</el-dropdown-item>
-						<el-dropdown-item divided @click.native="logout">退出登录</el-dropdown-item>
+						<el-dropdown-item>Example link</el-dropdown-item>
+						<el-dropdown-item divided @click.native="logout">Logout</el-dropdown-item>
 					</el-dropdown-menu>
 				</el-dropdown>
 			</el-col>
@@ -75,7 +74,7 @@
 	export default {
 		data() {
 			return {
-				sysName:'VUEADMIN',
+				sysName:'ADMIN',
 				collapsed:false,
 				sysUserName: '',
 				sysUserAvatar: '',
@@ -106,7 +105,7 @@
 			//退出登录
 			logout: function () {
 				var _this = this;
-				this.$confirm('确认退出吗?', '提示', {
+				this.$confirm('Are you sure?', 'Logout', {
 					//type: 'warning'
 				}).then(() => {
 					sessionStorage.removeItem('user');
