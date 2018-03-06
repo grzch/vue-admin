@@ -2,6 +2,7 @@ import axios from 'axios';
 
 export default function (url) {
     const prepareURL = (urlParams) => {
+        urlParams = urlParams || {}
         if (typeof urlParams !== 'object') {
             urlParams = {
                 id: urlParams
@@ -12,14 +13,17 @@ export default function (url) {
         return url.split('/').map(convertURLFragment).join('/').replace('//', '/')
     }
     return {
-        query: (urlParams, payload) => {
+        fetch: (urlParams, payload) => {
             return axios.get(prepareURL(urlParams), payload)
         },
-        put: (urlParams, payload) => {
+        update: (urlParams, payload) => {
             return axios.put(prepareURL(urlParams), payload)
         },
         get: (urlParams, payload) => {
             return axios.get(prepareURL(urlParams), payload)
+        },
+        save: (payload) => {
+            return axios.post(prepareURL(), payload)
         },
         delete: (urlParams) => {
             return axios.delete(prepareURL(urlParams))

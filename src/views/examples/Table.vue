@@ -6,7 +6,7 @@
                     <el-input v-model="filters.name" placeholder="Search phrase"></el-input>
                 </el-form-item>
                 <el-form-item>
-                    <el-button type="primary" v-on:click="getPosts">Refresh</el-button>
+                    <el-button type="primary" v-on:click="fetchData">Refresh</el-button>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="handleAdd">Add</el-button>
@@ -32,8 +32,6 @@
 
         <!--Pagination-->
         <el-col :span="24" class="toolbar">
-            <el-button type="danger" @click="batchRemove" :disabled="this.selected.length===0">Delete selected
-            </el-button>
             <el-pagination layout="prev, pager, next" @current-change="handlePageChange" :page-size="pageSize"
                            :total="total" style="float:right;">
             </el-pagination>
@@ -78,7 +76,7 @@
 
     import axios from 'axios'
 
-    import {getUserListPage, removeUser, batchRemoveUser, editUser, addUser, Post} from '@/api/api';
+    import {Post} from '@/api/api';
 
     export default {
         data () {
@@ -113,15 +111,15 @@
             },
             handlePageChange (val) {
                 this.page = val;
-                this.getPosts();
+                this.fetchData();
             },
-            getPosts () {
+            fetchData () {
                 let params = {
                     page: this.page,
                     name: this.filters.name
                 };
                 this.listLoading = true;
-                Post.query().then(response => {
+                Post.fetch().then(response => {
                     this.data = response.data;
                     if (Array.isArray(this.data)) {
                         this.total = this.data.length;
@@ -140,7 +138,7 @@
                             message: 'Item was deleted',
                             type: 'success'
                         });
-                        this.getPosts();
+                        this.fetchData();
                     })
                 });
             },
@@ -163,9 +161,9 @@
                     if (valid) {
                         this.editLoading = true;
 
-                        let objCopy = Object.assign({}, this.editForm);
+                        let data = Object.assign({}, this.editForm);
 
-                        Post.put(objCopy.id, objCopy).then((res) => {
+                        Post.update(data.id, data).then((res) => {
                             this.editLoading = false;
                             //NProgress.done();
                             this.$message({
@@ -174,7 +172,7 @@
                             });
                             this.$refs['editForm'].resetFields();
                             this.editFormVisible = false;
-                            this.getPosts();
+                            this.fetchData();
                         });
                     }
                 });
@@ -182,53 +180,28 @@
             addSubmit: function () {
                 this.$refs.addForm.validate((valid) => {
                     if (valid) {
-                        this.$confirm('确认提交吗？', '提示', {}).then(() => {
-                            this.addLoading = true;
-                            //NProgress.start();
-                            let para = Object.assign({}, this.addForm);
-                            para.birth = (!para.birth || para.birth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd');
-                            addUser(para).then((res) => {
-                                this.addLoading = false;
-                                //NProgress.done();
-                                this.$message({
-                                    message: '提交成功',
-                                    type: 'success'
-                                });
-                                this.$refs['addForm'].resetFields();
-                                this.addFormVisible = false;
-                                this.getPosts();
+                        this.addLoading = true;
+
+                        let data = Object.assign({}, this.addForm);
+                        Post.save(data).then((res) => {
+                            this.addLoading = false;
+                            this.$message({
+                                message: 'Item was added',
+                                type: 'success'
                             });
+                            this.$refs['addForm'].resetFields();
+                            this.addFormVisible = false;
+                            this.fetchData();
                         });
                     }
                 });
             },
             selectedChange: function (selected) {
                 this.selected = selected;
-            },
-            batchRemove: function () {
-                var ids = this.selected.map(item => item.id).toString();
-                this.$confirm('确认删除选中记录吗？', '提示', {
-                    type: 'warning'
-                }).then(() => {
-                    this.listLoading = true;
-                    //NProgress.start();
-                    let para = {ids: ids};
-                    batchRemoveUser(para).then((res) => {
-                        this.listLoading = false;
-                        //NProgress.done();
-                        this.$message({
-                            message: '删除成功',
-                            type: 'success'
-                        });
-                        this.getPosts();
-                    });
-                }).catch(() => {
-
-                });
             }
         },
         mounted () {
-            this.getPosts();
+            this.fetchData();
         }
     }
 
