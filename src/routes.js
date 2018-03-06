@@ -2,7 +2,7 @@ import Login from './views/Login.vue'
 import NotFound from './views/404.vue'
 import Home from './views/Home.vue'
 import Main from './views/Main.vue'
-import Table from './views/examples/Table.vue'
+import Posts from './views/examples/Posts.vue'
 import Form from './views/examples/Form.vue'
 import echarts from './views/examples/echarts.vue'
 
@@ -27,7 +27,7 @@ let routes = [
         iconCls: 'el-icon-star-on',
         children: [
             { path: '/main', component: Main, name: 'Main', hidden: true },
-            { path: '/table', component: Table, name: 'Table' },
+            { path: '/posts', component: Posts, name: 'Posts' },
             { path: '/form', component: Form, name: 'Form' },
             { path: '/echarts', component: echarts, name: 'Charts' }
         ]

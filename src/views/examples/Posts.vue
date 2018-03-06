@@ -1,12 +1,12 @@
 <template>
     <section>
         <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
-            <el-form :inline="true" :model="filters">
+            <el-form :inline="true" :model="filters" @submit.prevent="fetchData">
                 <el-form-item>
-                    <el-input v-model="filters.name" placeholder="Search phrase"></el-input>
+                    <el-input v-model="filters.q" placeholder="Search phrase"></el-input>
                 </el-form-item>
                 <el-form-item>
-                    <el-button type="primary" v-on:click="fetchData">Refresh</el-button>
+                    <el-button @click="fetchData">Search</el-button>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="handleAdd">Add</el-button>
@@ -14,7 +14,6 @@
             </el-form>
         </el-col>
 
-        <!--Table-->
         <el-table :data="data" highlight-current-row v-loading="listLoading" @selection-change="selectedChange"
                   style="width: 100%;">
             <el-table-column type="selection" width="55"></el-table-column>
@@ -81,9 +80,7 @@
     export default {
         data () {
             return {
-                filters: {
-                    name: ''
-                },
+                filters: {},
                 data: [],
                 total: 0,
                 page: 1,
@@ -116,10 +113,10 @@
             fetchData () {
                 let params = {
                     page: this.page,
-                    name: this.filters.name
+                    ...this.filters
                 };
                 this.listLoading = true;
-                Post.fetch().then(response => {
+                Post.fetch({}, {params}).then(response => {
                     this.data = response.data;
                     if (Array.isArray(this.data)) {
                         this.total = this.data.length;
