@@ -7,7 +7,7 @@
             <el-input v-model="form.name"></el-input>
         </el-form-item>
         <el-form-item label="Region">
-            <el-select v-model="form.region" placeholder="Select your region">
+            <el-select filterable v-model="form.region" placeholder="Select your region">
                 <el-option label="EU" value="eu"></el-option>
                 <el-option label="US" value="US"></el-option>
             </el-select>

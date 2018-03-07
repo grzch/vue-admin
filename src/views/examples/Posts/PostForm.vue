@@ -1,7 +1,7 @@
 <template>
     <div>
         <el-form ref="form" :model="form"
-                 label-width="100px" @submit.prevent="onSubmit"
+                 label-width="100px" @submit.prevent.native="onSubmit"
                  style="margin:20px;width:60%;min-width:600px;">
             <el-form-item label="Title">
                 <el-input v-model="form.title"></el-input>
@@ -18,7 +18,6 @@
                 </router-link>
             </el-form-item>
         </el-form>
-
     </div>
 </template>
 <script>

@@ -1,19 +1,23 @@
 <template>
     <div>
         <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
-            <el-form :inline="true" :model="filters" @submit.prevent="fetchData">
-                <el-form-item>
-                    <el-input v-model="filters.q" placeholder="Search phrase"></el-input>
-                </el-form-item>
-                <el-form-item>
-                    <el-button @click="fetchData">Search</el-button>
-                </el-form-item>
-                <el-form-item>
+            <div class="table__header">
+                <div class="table__header-column">
+                    <el-form :inline="true" :model="filters" @submit.prevent.native="fetchData">
+                        <el-form-item>
+                            <el-input v-model="filters.q" placeholder="Search phrase"></el-input>
+                        </el-form-item>
+                        <el-form-item>
+                            <el-button @click="fetchData">Search</el-button>
+                        </el-form-item>
+                    </el-form>
+                </div>
+                <div class="table_header-column">
                     <router-link :to="{name: 'Add Post'}">
-                        <el-button type="primary">Add</el-button>
+                        <el-button type="primary">Add <i class="el-icon-plus"></i></el-button>
                     </router-link>
-                </el-form-item>
-            </el-form>
+                </div>
+            </div>
         </el-col>
         <el-table :data="data" highlight-current-row v-loading="listLoading" @selection-change="selectedChange"
                   style="width: 100%;">
@@ -92,54 +96,6 @@
                     })
                 });
             },
-//            handleEdit: function (index, row) {
-//                this.editFormVisible = true;
-//                this.editForm = Object.assign({}, row);
-//            },
-//            handleAdd: function () {
-//                this.addFormVisible = true;
-//                this.addForm = {};
-//            },
-//            editSubmit: function () {
-//                this.$refs.editForm.validate((valid) => {
-//                    if (valid) {
-//                        this.editLoading = true;
-//
-//                        let data = Object.assign({}, this.editForm);
-//
-//                        Post.update(data.id, data).then((res) => {
-//                            this.editLoading = false;
-//                            //NProgress.done();
-//                            this.$message({
-//                                message: 'Item was updated',
-//                                type: 'success'
-//                            });
-//                            this.$refs['editForm'].resetFields();
-//                            this.editFormVisible = false;
-//                            this.fetchData();
-//                        });
-//                    }
-//                });
-//            },
-//            addSubmit: function () {
-//                this.$refs.addForm.validate((valid) => {
-//                    if (valid) {
-//                        this.addLoading = true;
-//
-//                        let data = Object.assign({}, this.addForm);
-//                        Post.save(data).then((res) => {
-//                            this.addLoading = false;
-//                            this.$message({
-//                                message: 'Item was added',
-//                                type: 'success'
-//                            });
-//                            this.$refs['addForm'].resetFields();
-//                            this.addFormVisible = false;
-//                            this.fetchData();
-//                        });
-//                    }
-//                });
-//            },
             selectedChange: function (selected) {
                 this.selected = selected;
             }
@@ -150,4 +106,11 @@
     }
 </script>
 <style lang="scss" scoped>
+    .table {
+        &__header {
+            display: flex;
+            justify-content: space-between;
+            &-column {}
+        }
+    }
 </style>
