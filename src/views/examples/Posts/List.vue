@@ -1,36 +1,46 @@
 <template>
-    <section>
-        <!-- Add dialog -->
-        <List></List>
-        <AddModal></AddModal>
-        <EditModal></EditModal>
-    </section>
+    <div>
+        <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
+            <el-form :inline="true" :model="filters" @submit.prevent="fetchData">
+                <el-form-item>
+                    <el-input v-model="filters.q" placeholder="Search phrase"></el-input>
+                </el-form-item>
+                <el-form-item>
+                    <el-button @click="fetchData">Search</el-button>
+                </el-form-item>
+                <el-form-item>
+                    <el-button type="primary" @click="handleAdd">Add</el-button>
+                </el-form-item>
+            </el-form>
+        </el-col>
+        <el-table :data="data" highlight-current-row v-loading="listLoading" @selection-change="selectedChange"
+                  style="width: 100%;">
+            <el-table-column type="selection" width="55"></el-table-column>
+            <el-table-column prop="id" label="id" width="80" sortable></el-table-column>
+            <el-table-column prop="title" label="title" sortable></el-table-column>
+            <el-table-column prop="body" label="body" :formatter="formatBody" sortable></el-table-column>
+            <el-table-column label="options" width="150">
+                <template slot-scope="scope">
+                    <el-button size="small" @click="handleEdit(scope.$index, scope.row)">edit</el-button>
+                    <el-button type="danger" size="small" @click="handleDelete(scope.$index, scope.row)">delete
+                    </el-button>
+                </template>
+            </el-table-column>
+        </el-table>
+
+    </div>
 </template>
-
 <script>
-    import util from '../../common/js/util'
-    import errorHandler from '@/api/errorHandler'
-
-    import axios from 'axios'
-
-    import {Post} from '@/api/api';
-
-    import AddModal from '@/views/examples/Posts/AddModal'
-    import EditModal from '@/views/examples/Posts/EditModal'
-    import List from '@/views/examples/Posts/List'
-
     export default {
         data () {
             return {
-                addFormVisible: false,
-                editFormVisible: false,
-                editLoading: false,
-                editFormRules: {},
-                editForm: {},
-                addLoading: false,
-                addFormRules: {},
-                addForm: {}
-
+                filters: {},
+                data: [],
+                total: 0,
+                page: 1,
+                pageSize: 100,
+                listLoading: false,
+                selected: []
             }
         },
         methods: {
@@ -80,13 +90,7 @@
             },
             handleAdd: function () {
                 this.addFormVisible = true;
-                this.addForm = {
-                    name: '',
-                    sex: -1,
-                    age: 0,
-                    birth: '',
-                    addr: ''
-                };
+                this.addForm = {};
             },
             editSubmit: function () {
                 this.$refs.editForm.validate((valid) => {
@@ -141,9 +145,6 @@
             this.fetchData();
         }
     }
-
 </script>
-
-<style scoped>
-
+<style lang="scss" scoped>
 </style>

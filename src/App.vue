@@ -18,8 +18,7 @@
     body {
         margin: 0px;
         padding: 0px;
-        font-family: Helvetica Neue, Helvetica, sans-serif;
-        font-size: 14px;
+        font-family: Helvetica Neue, Helvetica, sans-serif;  font-size: 14px;
         -webkit-font-smoothing: antialiased;
     }
 
