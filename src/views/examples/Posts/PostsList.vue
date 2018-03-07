@@ -9,7 +9,9 @@
                     <el-button @click="fetchData">Search</el-button>
                 </el-form-item>
                 <el-form-item>
-                    <el-button type="primary" @click="handleAdd">Add</el-button>
+                    <router-link :to="{name: 'Add Post'}">
+                        <el-button type="primary">Add</el-button>
+                    </router-link>
                 </el-form-item>
             </el-form>
         </el-col>
@@ -21,16 +23,22 @@
             <el-table-column prop="body" label="body" :formatter="formatBody" sortable></el-table-column>
             <el-table-column label="options" width="150">
                 <template slot-scope="scope">
-                    <el-button size="small" @click="handleEdit(scope.$index, scope.row)">edit</el-button>
+                    <router-link :to="{name: 'Edit Post', params: {id: scope.row.id}}">
+                        <el-button size="small">
+                            edit
+                        </el-button>
+                    </router-link>
                     <el-button type="danger" size="small" @click="handleDelete(scope.$index, scope.row)">delete
                     </el-button>
                 </template>
             </el-table-column>
         </el-table>
-
     </div>
 </template>
 <script>
+    import {Post} from '@/api/api';
+    import errorHandler from '@/api/errorHandler'
+
     export default {
         data () {
             return {
@@ -84,62 +92,57 @@
                     })
                 });
             },
-            handleEdit: function (index, row) {
-                this.editFormVisible = true;
-                this.editForm = Object.assign({}, row);
-            },
-            handleAdd: function () {
-                this.addFormVisible = true;
-                this.addForm = {};
-            },
-            editSubmit: function () {
-                this.$refs.editForm.validate((valid) => {
-                    if (valid) {
-                        this.editLoading = true;
-
-                        let data = Object.assign({}, this.editForm);
-
-                        Post.update(data.id, data).then((res) => {
-                            this.editLoading = false;
-                            //NProgress.done();
-                            this.$message({
-                                message: 'Item was updated',
-                                type: 'success'
-                            });
-                            this.$refs['editForm'].resetFields();
-                            this.editFormVisible = false;
-                            this.fetchData();
-                        });
-                    }
-                });
-            },
-            addSubmit: function () {
-                this.$refs.addForm.validate((valid) => {
-                    if (valid) {
-                        this.addLoading = true;
-
-                        let data = Object.assign({}, this.addForm);
-                        Post.save(data).then((res) => {
-                            this.addLoading = false;
-                            this.$message({
-                                message: 'Item was added',
-                                type: 'success'
-                            });
-                            this.$refs['addForm'].resetFields();
-                            this.addFormVisible = false;
-                            this.fetchData();
-                        });
-                    }
-                });
-            },
+//            handleEdit: function (index, row) {
+//                this.editFormVisible = true;
+//                this.editForm = Object.assign({}, row);
+//            },
+//            handleAdd: function () {
+//                this.addFormVisible = true;
+//                this.addForm = {};
+//            },
+//            editSubmit: function () {
+//                this.$refs.editForm.validate((valid) => {
+//                    if (valid) {
+//                        this.editLoading = true;
+//
+//                        let data = Object.assign({}, this.editForm);
+//
+//                        Post.update(data.id, data).then((res) => {
+//                            this.editLoading = false;
+//                            //NProgress.done();
+//                            this.$message({
+//                                message: 'Item was updated',
+//                                type: 'success'
+//                            });
+//                            this.$refs['editForm'].resetFields();
+//                            this.editFormVisible = false;
+//                            this.fetchData();
+//                        });
+//                    }
+//                });
+//            },
+//            addSubmit: function () {
+//                this.$refs.addForm.validate((valid) => {
+//                    if (valid) {
+//                        this.addLoading = true;
+//
+//                        let data = Object.assign({}, this.addForm);
+//                        Post.save(data).then((res) => {
+//                            this.addLoading = false;
+//                            this.$message({
+//                                message: 'Item was added',
+//                                type: 'success'
+//                            });
+//                            this.$refs['addForm'].resetFields();
+//                            this.addFormVisible = false;
+//                            this.fetchData();
+//                        });
+//                    }
+//                });
+//            },
             selectedChange: function (selected) {
                 this.selected = selected;
             }
-        },
-        components: {
-            List,
-            AddModal,
-            EditModal
         },
         mounted () {
             this.fetchData();
