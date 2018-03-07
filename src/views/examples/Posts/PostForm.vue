@@ -1,7 +1,6 @@
 <template>
     <div>
         <el-form ref="form" :model="form"
-                 v-loading.fullscreen.lock="loading"
                  label-width="100px" @submit.prevent="onSubmit"
                  style="margin:20px;width:60%;min-width:600px;">
             <el-form-item label="Title">
@@ -11,7 +10,7 @@
                 <el-input type="textarea" v-model="form.body"></el-input>
             </el-form-item>
             <el-form-item>
-                <el-button @click="onSubmit" type="primary">
+                <el-button @click="onSubmit" type="primary" :loading="loading">
                     Submit
                 </el-button>
                 <router-link :to="listRoute">
