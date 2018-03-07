@@ -1,7 +1,6 @@
 <template>
     <el-form ref="form" :model="form"
-             v-loading.fullscreen.lock="loading"
-             label-width="100px" @submit.prevent="onSubmit"
+             label-width="100px" @submit.prevent.native="onSubmit"
              style="margin:20px;width:60%;min-width:600px;">
         <el-form-item label="Name">
             <el-input v-model="form.name"></el-input>
@@ -28,10 +27,10 @@
         </el-form-item>
         <el-form-item label="Type of something">
             <el-checkbox-group v-model="form.type">
-                <el-checkbox label="Type A" name="type"></el-checkbox>
-                <el-checkbox label="Type B" name="type"></el-checkbox>
-                <el-checkbox label="Type C" name="type"></el-checkbox>
-                <el-checkbox label="Type D" name="type"></el-checkbox>
+                <el-checkbox label="Type A"></el-checkbox>
+                <el-checkbox label="Type B"></el-checkbox>
+                <el-checkbox label="Type C"></el-checkbox>
+                <el-checkbox label="Type D"></el-checkbox>
             </el-checkbox-group>
         </el-form-item>
         <el-form-item label="Radio">
@@ -44,33 +43,31 @@
             <el-input type="textarea" v-model="form.description"></el-input>
         </el-form-item>
         <el-form-item>
-            <el-button type="primary">Submit</el-button>
-            <el-button @click.native.prevent>Cancel</el-button>
+            <el-button @click="onSubmit" type="primary" :loading="loading">
+                Submit
+            </el-button>
+            <el-button>Cancel</el-button>
         </el-form-item>
     </el-form>
 </template>
 
 <script>
-    import {Post} from '@/api/api';
-
     export default {
         data () {
             return {
                 loading: false,
-                form: {}
+                form: {
+                    type: []
+                }
             }
         },
         methods: {
             onSubmit () {
                 this.loading = true;
-                Post.save(this.form).then(response => {
+                setTimeout(() => {
                     this.loading = false;
-                    this.$message({
-                        message: 'Item was added',
-                        type: 'success'
-                    });
-                })
-                console.log('submit!');
+                    console.log('submit!');
+                }, 1000)
             }
         }
     }
