@@ -2,7 +2,6 @@ import Login from './views/Login.vue'
 import NotFound from './views/404.vue'
 import Home from './views/Home.vue'
 import Main from './views/Main.vue'
-import Posts from './views/examples/Posts.vue'
 import PostsList from './views/examples/Posts/PostsList.vue'
 import PostForm from './views/examples/Posts/PostForm.vue'
 import Form from './views/examples/Form.vue'
@@ -29,13 +28,13 @@ let routes = [
         iconCls: 'el-icon-star-on',
         children: [
             {
-                path: '/main', component: Main, name: 'Main', hidden: true
+                path: 'main', component: Main, name: 'Main', hidden: true
             },
             {
-                path: '/form', component: Form, name: 'Form'
+                path: 'form', component: Form, name: 'Form'
             },
             {
-                path: '/echarts', component: echarts, name: 'Charts'
+                path: 'echarts', component: echarts, name: 'Charts'
             }
         ]
     },

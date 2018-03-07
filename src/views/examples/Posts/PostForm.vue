@@ -11,8 +11,12 @@
                 <el-input type="textarea" v-model="form.body"></el-input>
             </el-form-item>
             <el-form-item>
-                <el-button type="primary">Submit</el-button>
-                <el-button @click.native.prevent>Cancel</el-button>
+                <el-button @click="onSubmit" type="primary">
+                    Submit
+                </el-button>
+                <router-link :to="listRoute">
+                    <el-button>Cancel</el-button>
+                </router-link>
             </el-form-item>
         </el-form>
 
@@ -25,6 +29,7 @@
         data () {
             return {
                 loading: false,
+                listRoute: {name: 'Posts List'},
                 form: {}
             }
         },
@@ -41,14 +46,16 @@
             },
             onSubmit () {
                 this.loading = true;
-                Post.save(this.form).then(response => {
+                const id = this.$route.params.id
+                const service = id ? Post.update(id, this.form) : Post.save(this.form)
+                service.then(response => {
                     this.loading = false;
                     this.$message({
                         message: 'Item was added',
                         type: 'success'
                     });
+                    this.$router.push(this.listRoute)
                 })
-                console.log('submit!');
             }
         }
     }
